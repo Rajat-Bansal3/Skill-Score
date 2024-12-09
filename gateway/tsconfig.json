@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "esModuleInterop": true, // Enables compatibility between CommonJS and ESModules
+    "rootDir": "./src",
+    "skipLibCheck": true, // Skips type checking of declaration files, speeding up compilation
+    "target": "ES2022", // Target ECMAScript 2022 (modern JavaScript features)
+    "module": "NodeNext", // Uses Node.js module resolution (for ES Modules)
+    "allowJs": true, // Allows JavaScript files to be compiled (if needed)
+    "isolatedModules": true, // Ensures TypeScript can run on isolated modules
+    "sourceMap": true, // Generates source maps for debugging
+    "baseUrl": ".",
+
+    /* Strictness */
+    "strict": true, // Enables all strict type-checking options
+    "noUncheckedIndexedAccess": true, // Ensures that indexed access is checked for undefined
+    "noImplicitOverride": true, // Enforces explicit overriding of methods
+
+    /* Output configuration */
+    "outDir": "./dist", // Specifies the output directory for compiled files
+    "declaration": true, // Generates .d.ts files for the code (useful for libraries)
+    "declarationMap": true, // Generates declaration map files for debugging declarations
+
+    /* Libraries for Node.js */
+    "lib": ["ES2022"], // Use ES2022 features and avoid DOM specific features
+
+    /* Other Options */
+    "resolveJsonModule": true, // Allow JSON imports in your project
+    "paths": {
+      "@/*": ["*"],
+      "@shared/*": ["../shared/*"]
+    }
+  },
+  "include": ["src/**/*"], // Include all TypeScript files under the `src` folder
+  "exclude": ["node_modules"] // Exclude `node_modules` from compilation
+}

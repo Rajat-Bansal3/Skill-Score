@@ -1,0 +1,28 @@
+{
+  "name": "@skill_score/shared",
+  "version": "1.0.0",
+  "description": "Shared models and utilities for Skill Score",
+  "type": "commonjs",
+  "private": true,
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/sanitize-html": "^2.13.0",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.8.3",
+    "sanitize-html": "^2.13.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.2.2"
+  }
+}
