@@ -29,9 +29,8 @@
     "paths": {
       "@/*": ["*"],
       "@shared/*": ["../shared/*"]
-    },
-    "typeRoots": ["./node_modules/@types", "src/declarations/websocket.d.ts"]
+    }
   },
-  "include": ["src/**/*", "src/declarations/websocket.d.ts"], // Include all TypeScript files under the `src` folder
+  "include": ["src/**/*"], // Include all TypeScript files under the `src` folder
   "exclude": ["node_modules"] // Exclude `node_modules` from compilation
 }

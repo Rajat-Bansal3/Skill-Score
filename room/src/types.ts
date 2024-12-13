@@ -16,7 +16,13 @@ export interface SendMessageMessage {
   message: string;
   userId: string;
 }
+export interface LeaderBoardMessage {
+  type: "Leaderboard";
+  tournamentId: string;
+  userId: string;
+}
 export type ClientMessage =
   | JoinTournamentMessage
   | LeaveTournamentMessage
-  | SendMessageMessage;
+  | SendMessageMessage
+  | LeaderBoardMessage;

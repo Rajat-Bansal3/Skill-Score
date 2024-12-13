@@ -152,7 +152,7 @@ export const UserValidationSchema = z
       .trim(),
 
     email: z.string().email({ message: "Invalid email address format" }),
-
+    state: z.enum(["ONLINE", "OFFLINE", "INGAME"]),
     tournament: z
       .string()
       .min(1, { message: "Tournament name cannot be empty" })

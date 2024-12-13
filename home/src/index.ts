@@ -54,6 +54,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(5002, () => {
+app.listen(process.env.PORT, () => {
   console.log("http://localhost:5002");
 });

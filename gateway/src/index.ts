@@ -62,6 +62,6 @@ app.use(
   }
 );
 
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
   console.log("API Gateway is running on port 5000");
 });

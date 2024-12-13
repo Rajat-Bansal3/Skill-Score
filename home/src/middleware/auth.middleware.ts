@@ -31,7 +31,12 @@ export const AuthMiddleware = (
       req.role = decoded.role as string;
       next();
     } else {
-      throw new Error("Invalid token structure");
+      return errorHandler(
+        res,
+        "UNAUTHENTICATED",
+        "Missing or invalid token",
+        401
+      );
     }
   } catch (error) {
     return errorHandler(

@@ -332,6 +332,12 @@ export const createModels = (mongooseInstance: typeof mongoose) => {
           message: "OTP expiry must be a valid future date",
         },
       },
+      state: {
+        type: String,
+        enum: ["ONLINE", "OFFLINE", "INGAME"],
+        default: "OFFLINE",
+        required: true,
+      },
     },
     { timestamps: true }
   );

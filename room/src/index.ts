@@ -2,10 +2,20 @@ import WebSocket, { WebSocketServer } from "ws";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { ClientMessage } from "./types";
-import { createModels } from "@skill_score/shared";
-import { errorHandler, SuccessHandler } from "./utils/responseHandlers";
-
+import { JwtPayload } from "jsonwebtoken";
+import { AuthMiddleware } from "./middlewares/Auth.middleware";
+import {
+  joinTournament,
+  leaveTournament,
+  sendMessage,
+} from "./functions/roomFunctions";
 dotenv.config();
+
+declare module "ws" {
+  interface WebSocket {
+    user?: JwtPayload;
+  }
+}
 
 mongoose
   .connect(process.env.MONGO_URI || "")
@@ -15,18 +25,17 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
-const { User, Room } = createModels(mongoose);
 
-const wsServer = new WebSocketServer({ port: 8080 });
+const wsServer = new WebSocketServer({ port: Number(process.env.PORT!) });
 const userConnections = new Map<string, WebSocket>();
 
-wsServer.on("connection", (socket: WebSocket) => {
+wsServer.on("connection", (socket: WebSocket, req) => {
+  const url = new URL(req.url || "", `http://${req.headers.host}`);
+  AuthMiddleware(url, socket, userConnections);
+
   socket.on("message", async (message: WebSocket.RawData) => {
     try {
       const data = JSON.parse(message.toString()) as ClientMessage;
-      userConnections.set(data.userId, socket);
-      console.log(`${data.userId} has joined ${data.tournamentId}`);
-
       switch (data.type) {
         case "join_tournament":
           if (data.tournamentId) {
@@ -75,105 +84,6 @@ wsServer.on("connection", (socket: WebSocket) => {
 
     if (userId) {
       userConnections.delete(userId);
-      console.log(`User ${userId} disconnected.`);
     }
   });
 });
-
-const joinTournament = async (
-  tournamentId: string,
-  userId: string | undefined,
-  socket: WebSocket
-): Promise<void> => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        tournament: tournamentId,
-      },
-      {
-        new: true,
-        projection: { passwordHash: 0 },
-      }
-    );
-    const tournament = await Room.findByIdAndUpdate(
-      tournamentId,
-      {
-        $addToSet: {
-          currentUsers: userId,
-        },
-      },
-      { new: true }
-    );
-    if (!user || !tournament)
-      return errorHandler(
-        socket,
-        "Tournament or User doesnt Exists",
-        "RESOURCE_NOT_FOUND",
-        404
-      );
-    return SuccessHandler(
-      socket,
-      "joined Successfully",
-      { user, tournament },
-      200
-    );
-  } catch (error: any) {
-    return errorHandler(socket, error);
-  }
-};
-
-const leaveTournament = async (
-  tournamentId: string,
-  userId: string | undefined,
-  socket: WebSocket
-): Promise<void> => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        $unset: { tournament: "" },
-      },
-      {
-        new: true,
-        projection: { passwordHash: 0 },
-      }
-    );
-
-    const tournament = await Room.findByIdAndUpdate(
-      tournamentId,
-      {
-        $pull: { currentUsers: userId },
-      },
-      { new: true }
-    );
-
-    if (!user || !tournament)
-      return errorHandler(
-        socket,
-        "Tournament or User doesn't exist",
-        "RESOURCE_NOT_FOUND",
-        404
-      );
-
-    return SuccessHandler(
-      socket,
-      "Left the tournament successfully",
-      { user, tournament },
-      200
-    );
-  } catch (error: any) {
-    return errorHandler(socket, error);
-  }
-};
-
-const sendMessage = async (
-  tournamentId: string,
-  userId: string | undefined,
-  message: string,
-  socket: WebSocket
-): Promise<void> => {
-  console.log(
-    `User ${userId} sent message to tournament ${tournamentId}: ${message}`
-  );
-};

@@ -9,6 +9,7 @@ import { AuthRouter } from "./routers/index";
 import { getCounter, saveCounter } from "./utils/reqcounter";
 import { connect } from "./utils/mongoCon";
 import { verifyEmail, verifyPhone } from "./controllers/auth.controller";
+import { env } from "./types/env";
 connect();
 let requestCount = getCounter();
 const app = express();
@@ -42,6 +43,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(5001, () => {
+app.listen(env.PORT, () => {
   console.log("http://localhost:5001");
 });

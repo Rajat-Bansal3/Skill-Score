@@ -15,8 +15,10 @@
   "license": "ISC",
   "dependencies": {
     "@skill_score/shared": "file:../shared",
+    "@types/jsonwebtoken": "^9.0.7",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.3",
     "uuid": "^11.0.3",
     "ws": "^8.18.0"
