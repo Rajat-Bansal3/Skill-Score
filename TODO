@@ -1,0 +1,9 @@
+workers to pick task from queue
+room creation service 
+queue service that handles and isolates queue operations
+containerise whole application
+use kubernatives hsp for worker and ws scaling 
+use kubernatives for scaling and deploying each server
+make a caching service using redis  
+
+production env no more banned simmilar app 
